@@ -21,9 +21,9 @@ public class Menu {
 		findEmployee.setEmployeeDiary(new Diary());
 		
 		Employee loadEmployee = new Employee(15);
-		loadEmployee.setEmployeeDiary(loadEmployee.loadDiary("./Data Structures Assignment Test/Files/Test.txt"));
+		loadEmployee.setEmployeeDiary(loadEmployee.loadDiary("./Files/Test.txt"));
 		loadEmployee.printDiary();
-		loadEmployee.getEmployeeDiary().saveDiary("./Data Structures Assignment Test/Files/Test2.txt");
+		loadEmployee.getEmployeeDiary().saveDiary("./Files/Test2.txt");
 		
 		
 		

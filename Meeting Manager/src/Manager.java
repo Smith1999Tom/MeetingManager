@@ -11,7 +11,6 @@ public class Manager {
 		employeeTree = new TreeSet<Employee>();
 	}
 	
-	
 	Boolean isEmpty()
 	{
 		return employeeTree.isEmpty();
@@ -36,7 +35,4 @@ public class Manager {
 	{
 		employeeTree.add(addEmployee);
 	}
-	
-	
 }
-
