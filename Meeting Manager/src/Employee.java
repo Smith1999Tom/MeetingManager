@@ -7,6 +7,7 @@ public class Employee implements Comparable<Employee>{
 	Employee(int ID)
 	{
 		this.employeeID = ID;
+		this.employeeDiary = new Diary();
 	}
 
 	public Diary getEmployeeDiary() {
@@ -41,6 +42,11 @@ public class Employee implements Comparable<Employee>{
 		Diary loadDiary = new Diary();
 		loadDiary = loadDiary.loadDiary(loadString);
 		return loadDiary;
+	}
+	
+	void saveDiary(String saveString)
+	{
+		employeeDiary.saveDiary(saveString);
 	}
 	
 	void printDiary()
