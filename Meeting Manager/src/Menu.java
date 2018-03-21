@@ -1,23 +1,25 @@
+import java.util.Scanner;
 
 public class Menu {
 
-	Manager managerTree;
+	static Manager managerTree;
+	static Employee currentEmployee;
 
 	public static void main(String[] args)
 	{
-		Menu testMenu = new Menu();
+		
 		
 		//Add an employee with a pre set diary
-		testMenu.managerTree = new Manager();
+		managerTree = new Manager();
 		Employee employee5 = new Employee(5);
 		employee5.setEmployeeDiary(new Diary());
-		testMenu.managerTree.addEmployee(employee5);
+		managerTree.addEmployee(employee5);
 		
 		//Add a diary to an employee already in the tree
 		Employee employee10 = new Employee(10);
-		testMenu.managerTree.addEmployee(employee10);
+		managerTree.addEmployee(employee10);
 		
-		Employee findEmployee = testMenu.managerTree.findEmployee(10);
+		Employee findEmployee = managerTree.findEmployee(10);
 		findEmployee.setEmployeeDiary(new Diary());
 		
 		Employee loadEmployee = new Employee(15);
@@ -25,12 +27,86 @@ public class Menu {
 		loadEmployee.printDiary();
 		loadEmployee.getEmployeeDiary().saveDiary("./Files/Test2.txt");
 		
-		
-		
-		
 		System.out.println("Done");
+	}
+	
+	
+	private static void mainMenu()
+	{
+		System.out.println("Select an option from the list below");
+		System.out.println("");
+		System.out.println("1 - Select an employee to manage");
+		System.out.println("2 - Search for available meetings");
+		System.out.println("3 - Exit program");
+		
+		int userChoice = getUserIntInput();
+		
+		switch(userChoice)
+		{
+		case 1:
+			System.out.println("Enter your employee ID");
+			int inputID = getUserIntInput();
+			currentEmployee = managerTree.findEmployee(inputID);
+			if(currentEmployee != null)
+				employeeMenu();
+			break;
+			
+		}
+				
 		
 	}
+	
+	private static void employeeMenu()
+	{
+		System.out.println("Select an option from the list below");
+		System.out.println("");
+		System.out.println("1 - Add a meeting");
+		System.out.println("2 - Remove a meeting");
+		System.out.println("3 - Edit a meeting");
+		System.out.println("4 - Undo last meeting");
+		System.out.println("5 - Save employee diary");
+		System.out.println("6 - Load employee diary");
+		System.out.println("7 - Return to main menu");
+		
+		int userChoice = getUserIntInput();
+		switch(userChoice)
+		{
+		case 5:	//Save
+		
+			break;
+		case 6:	//Load
+			
+			break;
+		}
+		
+	}
+	
+	private static int getUserIntInput()
+	{
+		Scanner sc = new Scanner(System.in);
+		int userInput;
+		while(true)
+		{
+			if(sc.hasNextInt())
+			{
+				userInput = sc.nextInt();
+				return userInput;
+			}
+			else
+			{
+				sc.next();
+				System.out.println("Invalid input. Please enter a number");
+			}
+		}
+	}
+	
+	private static String getUserStringInput()
+	{
+		
+	}
+	
+	
+	
 	
 	
 }
