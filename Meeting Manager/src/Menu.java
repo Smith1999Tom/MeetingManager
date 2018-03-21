@@ -97,7 +97,8 @@ public class Menu {
 				currentEmployee.saveDiary(saveString);
 				break;
 			case 6:	//Load
-				
+				String loadString = getUserStringInput();
+				currentEmployee.loadDiary(loadString);
 				break;
 			}
 		}

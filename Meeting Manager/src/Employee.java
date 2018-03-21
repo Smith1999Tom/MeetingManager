@@ -37,11 +37,12 @@ public class Employee implements Comparable<Employee>{
 			return 0;
 	}
 	
-	Diary loadDiary(String loadString)
+	void loadDiary(String loadString)
 	{
 		Diary loadDiary = new Diary();
 		loadDiary = loadDiary.loadDiary(loadString);
-		return loadDiary;
+		if(loadDiary != null)
+			this.employeeDiary = loadDiary;
 	}
 	
 	void saveDiary(String saveString)
