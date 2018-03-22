@@ -103,5 +103,21 @@ public class Diary {
 		System.out.println();
 	}
 	
+	public void sort()
+	{
+		Meeting temp;
+		int n = meetings.size();
+		for (int i = 0; i < n; i++) {
+	        for (int j = 1; j < (n - i); j++) {
+	            if (meetings.get(j-1).compareTo(meetings.get(j)) == 1) {
+	                temp = meetings.get(j-1);
+	                meetings.set(j - 1, meetings.get(j));
+	                meetings.set(j, temp);
+	            }
+	        }
+	    }	
+	}
+	
+	
 	
 }

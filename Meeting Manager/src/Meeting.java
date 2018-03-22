@@ -1,6 +1,6 @@
 import java.time.*;
 
-public class Meeting {
+public class Meeting implements Comparable<Meeting>{
 
 	LocalDate dateOfMeeting;
 	LocalTime startTime;
@@ -17,10 +17,19 @@ public class Meeting {
 	
 	Meeting(String date, String start, String end, String desc)
 	{
-		dateOfMeeting = LocalDate.parse(date);
-		startTime = LocalTime.parse(start);
-		endTime = LocalTime.parse(end);
-		description = desc;
+		try
+		{
+			dateOfMeeting = LocalDate.parse(date);
+			startTime = LocalTime.parse(start);
+			endTime = LocalTime.parse(end);
+			description = desc;
+		}
+		catch(java.time.format.DateTimeParseException e)
+		{
+			System.out.println("Invalid data entered - " + e);
+		}
+		
+		
 	}
 	
 	public LocalDate getDateOfMeeting() {
@@ -47,5 +56,24 @@ public class Meeting {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public int compareTo(Meeting compareMeeting)
+	{
+		if(this.dateOfMeeting.isBefore(compareMeeting.getDateOfMeeting()))
+			return -1;
+		else if(this.dateOfMeeting.isAfter(compareMeeting.getDateOfMeeting()))
+			return 1;
+		else
+			if(this.startTime.isBefore(compareMeeting.getStartTime()))
+			{
+				return -1;
+			}
+			else if(this.startTime.isAfter(compareMeeting.getStartTime()))
+			{
+				return 1;
+			}
+			else throw new NullPointerException();
+	}
+	
 	
 }

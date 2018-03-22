@@ -74,7 +74,8 @@ public class Menu {
 			System.out.println("4 - Undo last meeting");
 			System.out.println("5 - Save employee diary");
 			System.out.println("6 - Load employee diary");
-			System.out.println("7 - Return to main menu");
+			System.out.println("7 - Print employee diary");
+			System.out.println("8 - Return to menu");
 			
 			int userChoice = getUserIntInput();
 			switch(userChoice)
@@ -100,6 +101,10 @@ public class Menu {
 				String loadString = getUserStringInput();
 				currentEmployee.loadDiary(loadString);
 				break;
+			case 7: //Print
+				currentEmployee.getEmployeeDiary().print();
+				currentEmployee.getEmployeeDiary().sort();
+				currentEmployee.getEmployeeDiary().print();
 			}
 		}
 		
@@ -118,7 +123,7 @@ public class Menu {
 			}
 			else
 			{
-				sc.next();
+				sc.next();  
 				System.out.println("Invalid input. Please enter a number");
 			}
 		}
