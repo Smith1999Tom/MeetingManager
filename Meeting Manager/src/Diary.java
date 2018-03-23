@@ -8,7 +8,7 @@ import java.util.Iterator;
 public class Diary {
 
 	LinkedList<Meeting> meetings;
-	Stack<Meeting> undoStack;
+	Stack<Meeting> undoStack = new Stack<Meeting>();
 	Charset cs = StandardCharsets.UTF_8;
 	Iterator<Meeting> iterator;
 	
@@ -19,6 +19,8 @@ public class Diary {
 	
 	boolean addEntry(Meeting addMeeting)
 	{
+		Meeting undoMeeting = new Meeting(addMeeting);
+		undoStack.push(undoMeeting);
 		return meetings.add(addMeeting);
 	}
 	
@@ -118,6 +120,22 @@ public class Diary {
 	    }	
 	}
 	
-	
+	public void undo()
+	{
+		if(!undoStack.isEmpty())
+		{
+			Meeting undoMeeting = undoStack.pop();
+			if(undoMeeting.compareTo(undoMeeting.getUndoReference()) == 0)	//Meetings are same, so meeting was added
+			{
+				meetings.remove(undoMeeting.getUndoReference());
+			}
+		}
+		else
+			System.out.println("Cannot undo any further.");
+		
+		
+		
+		
+	}
 	
 }
