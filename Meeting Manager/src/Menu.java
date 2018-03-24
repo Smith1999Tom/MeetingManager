@@ -7,9 +7,32 @@ public class Menu {
 
 	public static void main(String[] args)
 	{
+		
+		/*
+		//Add an employee with a pre set diary
+		managerTree = new Manager();
+		Employee employee5 = new Employee(5);
+		employee5.setEmployeeDiary(new Diary());
+		managerTree.addEmployee(employee5);
+		
+		//Add a diary to an employee already in the tree
+		Employee employee10 = new Employee(10);
+		managerTree.addEmployee(employee10);
+		
+		Employee findEmployee = managerTree.findEmployee(10);
+		findEmployee.setEmployeeDiary(new Diary());
+		
+		Employee loadEmployee = new Employee(15);
+		loadEmployee.setEmployeeDiary(loadEmployee.loadDiary("./Files/Test.txt"));
+		loadEmployee.printDiary();
+		loadEmployee.getEmployeeDiary().saveDiary("./Files/Test2.txt");
+		*/
 		Employee addEmployee = new Employee(100);
 		managerTree.addEmployee(addEmployee);
 		mainMenu();
+		
+		
+		
 	}
 	
 	
@@ -32,8 +55,10 @@ public class Menu {
 			if(currentEmployee != null)
 				employeeMenu();
 			break;
-	
+			
 		}
+				
+		
 	}
 	
 	private static void employeeMenu()
@@ -67,10 +92,16 @@ public class Menu {
 				currentEmployee.getEmployeeDiary().addEntry(new Meeting(date, startTime, endTime, description));
 				break;
 				
+			case 2: //Delete
+				currentEmployee.getEmployeeDiary().searchWithDateTime("Delete");
+				break;
+			
+			case 3: //Edit
+				currentEmployee.getEmployeeDiary().searchWithDateTime("Edit");
+				break;
 			case 4: //Undo
 				currentEmployee.getEmployeeDiary().undo();
 				break;
-				
 			case 5:	//Save
 				String saveString = getUserStringInput();
 				currentEmployee.saveDiary(saveString);
@@ -80,7 +111,7 @@ public class Menu {
 				currentEmployee.loadDiary(loadString);
 				break;
 			case 7: //Print
-				//currentEmployee.getEmployeeDiary().print();
+				currentEmployee.getEmployeeDiary().print();
 				currentEmployee.getEmployeeDiary().sort();
 				currentEmployee.getEmployeeDiary().print();
 			}

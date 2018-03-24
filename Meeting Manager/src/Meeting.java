@@ -81,6 +81,8 @@ public class Meeting implements Comparable<Meeting>{
 	
 	public int compareTo(Meeting compareMeeting)
 	{
+		
+		
 		if(this.dateOfMeeting.isBefore(compareMeeting.getDateOfMeeting()))
 			return -1;
 		else if(this.dateOfMeeting.isAfter(compareMeeting.getDateOfMeeting()))
