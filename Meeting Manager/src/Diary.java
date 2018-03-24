@@ -362,6 +362,20 @@ public class Diary {
 		System.out.println();
 	}
 	
+	public void printDiary(Employee diary)
+	{
+		Diary diary2 = diary.getEmployeeDiary();
+		System.out.println("Diary of ID: " + diary.getEmployeeID());
+		System.out.println(" ");
+		meetings = diary2.getMeetings();
+		print();
+		
+}
+	
+	public LinkedList<Meeting> getMeetings() {
+		return meetings;
+	}
+
 	public void sort()
 	{
 		Meeting temp;
@@ -415,4 +429,74 @@ public class Diary {
 		
 		
 	}
+
+	public ArrayList<Meeting> checkIfValidForMultiple(Employee held,ArrayList<Meeting> theMeetingsList)
+	{
+		ArrayList<Meeting> hold = new ArrayList<Meeting>();
+		for(int x = 0; x <theMeetingsList.size(); x++)
+		{
+			int clash = 0;
+			Meeting test =	theMeetingsList.get(x);
+			LocalTime start = test.getStartTime();
+			LocalTime end =test.getEndTime();
+			LocalDate day = test.getDateOfMeeting();
+			if(meetings.isEmpty())
+			{
+			
+			}
+			else
+			{
+				for(int x1 = 0; x1<meetings.size();x1++)
+				{
+					Meeting meeting2 = meetings.pop();
+					LocalTime timeS = meeting2.getStartTime();
+					LocalTime timeE = meeting2.getEndTime();
+				    LocalDate date = meeting2.getDateOfMeeting();
+					if(date.isEqual(day))
+					{
+						if(timeS.equals(start) || timeS.equals(end))
+						{
+							clash++;
+							hold.add(meeting2);
+						}
+						else if(timeE.equals(start) || timeE.equals(end))
+						{
+							clash++;
+							hold.add(meeting2);
+						}
+						else
+						{
+							if(timeS.isAfter(start)  && timeS.isBefore(end) || timeE.isAfter(start)  && timeE.isBefore(end))
+							{
+								clash++;
+								hold.add(meeting2);
+							}
+							
+							else
+							{
+								hold.add(meeting2);
+							}
+						}
+					}
+					else
+					{
+						hold.add(meeting2);
+					}
+				}
+				}
+		
+				meetings.addAll(hold);
+				hold.removeAll(hold);
+				if(clash != 0)
+				{
+					theMeetingsList.remove(x);
+				}
+				else
+				{
+					
+				}
+			}
+			return theMeetingsList;
+}
+
 }

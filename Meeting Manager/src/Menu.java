@@ -27,8 +27,7 @@ public class Menu {
 		loadEmployee.printDiary();
 		loadEmployee.getEmployeeDiary().saveDiary("./Files/Test2.txt");
 		*/
-		Employee addEmployee = new Employee(100);
-		managerTree.addEmployee(addEmployee);
+		
 		mainMenu();
 		
 		
@@ -38,25 +37,37 @@ public class Menu {
 	
 	private static void mainMenu()
 	{
-		System.out.println("Select an option from the list below");
-		System.out.println("");
-		System.out.println("1 - Select an employee to manage");
-		System.out.println("2 - Search for available meetings");
-		System.out.println("3 - Exit program");
-		
-		int userChoice = getUserIntInput();
-		
-		switch(userChoice)
+		boolean exitCondition = false;
+		while(!exitCondition)
 		{
-		case 1:
-			System.out.println("Enter your employee ID");
-			int inputID = getUserIntInput();
-			currentEmployee = managerTree.findEmployee(inputID);
-			if(currentEmployee != null)
-				employeeMenu();
-			break;
+			System.out.println("Select an option from the list below");
+			System.out.println("");
+			System.out.println("1 - Select an employee to manage");
+			System.out.println("2 - Search for available meetings");
+			System.out.println("3 - Exit program");
 			
+			int userChoice = getUserIntInput();
+			
+			switch(userChoice)
+			{
+			case 1:
+				System.out.println("Enter your employee ID");
+				int inputID = getUserIntInput();
+				currentEmployee = managerTree.findEmployee(inputID);
+				if(currentEmployee != null)
+					employeeMenu();
+				break;
+			case 2:
+				managerTree.hold();
+				break;
+			case 3:
+				exitCondition = true;
+				break;
+			}
 		}
+		
+		
+		
 				
 		
 	}
@@ -111,9 +122,13 @@ public class Menu {
 				currentEmployee.loadDiary(loadString);
 				break;
 			case 7: //Print
-				currentEmployee.getEmployeeDiary().print();
+				//currentEmployee.getEmployeeDiary().print();
 				currentEmployee.getEmployeeDiary().sort();
 				currentEmployee.getEmployeeDiary().print();
+				break;
+			case 8: //Exit
+				exitCondition = true;
+				break;
 			}
 		}
 		
