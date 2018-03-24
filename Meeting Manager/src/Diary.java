@@ -22,13 +22,26 @@ public class Diary {
 	Diary()
 	{
 		meetings = new LinkedList<Meeting>();
+		clashes = new ArrayList<Meeting>();
+		possibleMeetings = new ArrayList<Meeting>();
 	}
 	
 	boolean addEntry(Meeting addMeeting)
 	{
-		Meeting undoMeeting = new Meeting(addMeeting);
-		undoStack.push(undoMeeting);
-		return meetings.add(addMeeting);
+		if(!checkIfValid(addMeeting))
+		{
+			Meeting undoMeeting = new Meeting(addMeeting);
+			undoStack.push(undoMeeting);
+			return meetings.add(addMeeting);
+		}
+		else
+		{
+			System.out.println("Meeting clashes with an existing meeting.");
+			return false;
+		}
+		
+		
+		
 	}
 	
 	Diary loadDiary(String pathString)
