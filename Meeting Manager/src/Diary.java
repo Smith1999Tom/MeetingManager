@@ -25,7 +25,9 @@ public class Diary {
 		clashes = new ArrayList<Meeting>();
 		possibleMeetings = new ArrayList<Meeting>();
 	}
-	
+	/**
+	 * This adds an entry to the meetings list
+	 */	
 	boolean addEntry(Meeting addMeeting)
 	{
 		if(!checkIfValid(addMeeting))
@@ -43,7 +45,17 @@ public class Diary {
 		
 		
 	}
-	
+	/**
+	 * This allows the user to load the diary from a file
+	 * 
+	 * @param diaryFile 	This detects the appropriate name from the user and loads the diary
+	 * @param br			This reads the file on a buffer, and checks each line 
+	 * @param bufferDiary	This recreates the info gained in br to make a new diary, adding the information to it
+	 * @param l1			This reads the appropriate line
+	 * @param l2			This reads the appropriate line
+	 * @param l3			This reads the appropriate line
+	 * @param l4			This reads the appropriate line
+	 */	
 	Diary loadDiary(String pathString)
 	{
 		Path diaryFile = Paths.get(pathString);
@@ -73,7 +85,18 @@ public class Diary {
 			return null;
 		}
 	}
-	
+	/**
+	 * This allows the user to save the diary to a file
+	 * 
+	 * @param diaryFile 	This detects the appropriate name from the user and loads the diary
+	 * @param bw			This writes the file on a buffer, and checks each line 
+	 * @param bufferDiary	This recreates the info gained in bw to make a new file, adding the information to it
+	 * @param iterator		This helps to determine the length, and checks if more are to be added
+	 * @param l1			This reads the appropriate line
+	 * @param l2			This reads the appropriate line
+	 * @param l3			This reads the appropriate line
+	 * @param l4			This reads the appropriate line
+	 */
 	boolean saveDiary(String pathString)
 	{
 		Path diaryFile = Paths.get(pathString);
@@ -110,7 +133,19 @@ public class Diary {
 			return false;
 		}
 	}
-	
+	/**
+	 * This allows the user to search for the undo, edit or delete work with this
+	 * @param dateString		This detects the user input
+	 * @param sc				This is the scanner, detects input
+	 * @param date 				This parses the info gained in date string to a LocalDate Input
+	 * @param timeString		This parses info to time, String type
+	 * @param time				This parses information gained in the previous string to LocalTime format
+	 * @param maxSize			This checks the size of the meetings located in the linked list, returns an int
+	 * @param search			This looks for the meeting and holds the meeting that it is appropriate to
+	 * @param meetings			This is the LinkedList that holds all the meetings for the user
+	 * @param editOrDelete		This holds the info from the inputted info the user got earlier
+	 * 
+	 */
 	//At employee menu when the user selects add or delete, enter this method along with either "Edit" or "Delete" for this method to work
 		public void searchWithDateTime(String editOrDelete) 
 		{
@@ -143,7 +178,24 @@ public class Diary {
 			}
 		}
 	
-		
+		/**
+		 * This allows the user to search for the undo, edit or delete work with this
+		 * 
+		 * @param tempDate				This holds the current date of the meeting
+		 * @param tempStart				This holds the current start time of the meeting 
+		 * @param tempEnd 				This hold the current end time of the meeting
+		 * @param tempDescription		This holds the current description for the meeting
+		 * @param meetings				This is the LinkedList that holds all the meetings for the user
+		 * @param stop					This is done at the end when the user confirms they have finished all edits
+		 * @param editHappened			This determines if an edit has happened to the meeting, and confirms to the user it has
+		 * @param newMeeting			This puts back in the edited node
+		 * @param partEdited			This determines which part needs editing, depending on user input
+		 * @param partEditedString		This is where the user inputs the new info
+		 * @param formattedDateEdit		This edits the date to the appropriate format
+		 * @param edit					This edits the node
+		 * @param valid					This confirms if the edits are valid or not 
+		 * @param Y						This checks if the user wants to keep editing, if Y or y is input, they do
+		 */
 		public void editMeeting(Meeting editMeeting) 
 		{
 		
@@ -261,7 +313,12 @@ public class Diary {
 			
 			
 		}
-		
+		/**
+		 * This deletes a meeting from the List
+		 * @param meetings			This is the LinkedList that holds all the users meetings
+		 * @param deletedMeeting	This allows the meeting to be deleted, passed on from the previous user inputs
+		 * @param undoStack			Holds the meeting incase the user wants to undo
+		 */	
 		public void deleteMeeting(Meeting deletedMeeting) 
 		{
 			
@@ -281,6 +338,21 @@ public class Diary {
 			}
 		}
 		
+		/**
+		 * This checks if it is possible for the meeting to be added, returns true or false
+		 * @param start 		This determines the nodes start time
+		 * @param end 			This determines the nodes end time
+		 * @param day			This determines the date of the meeting
+		 * @param clash			This determines the amount of clashes in the data, if one is found it cannot add it
+		 * @param meetings		This is the LinkedList that holds all the meetings for the appropriate user 
+		 * @param x				This is the iterator for the for loop
+		 * @param timeS			This is from the node in the meetings, compares start time
+		 * @param timeE			This is from the node in the meetings, compares end time
+		 * @param date 			This is from the node that holds meeting info. this is the date of it
+		 * @param hold			This acts as a means to save the meeting while its being checked
+		 * @param clashes 		This acts as a mechanism if a meeting already exists, this will refuse to add it if its there
+		 * @return true or false
+		 */	
 		public boolean checkIfValid(Meeting meeting)
 		{
 			LocalTime start = meeting.getStartTime();
@@ -347,7 +419,11 @@ public class Diary {
 				}
 			}
 				
-		
+	/**
+	 * This prints the meetings to the user
+	 * @param entryToPrint 		This is the node it is printing to the user, gathers all info
+	 * @param iterator			This allows the nodes to check if there is more, and gather that info
+	 */		
 	public void print()
 	{
 		iterator = meetings.iterator();
@@ -361,7 +437,12 @@ public class Diary {
 		}
 		System.out.println();
 	}
-	
+	/**
+	 * This adds formatting to the print
+	 * @param diary2	This gets the info from the diary of the selected user 
+	 * @param diary		This gets the info from the scanned input to the method, this is selected by the user
+	 * @param meetings 	This gets the info of the LinkedList, it holds all the info on the meetings
+	 */	
 	public void printDiary(Employee diary)
 	{
 		Diary diary2 = diary.getEmployeeDiary();
@@ -375,7 +456,9 @@ public class Diary {
 	public LinkedList<Meeting> getMeetings() {
 		return meetings;
 	}
-
+	/**
+	 * This sorts the meetings into order of the appropriate formatting
+	 */	
 	public void sort()
 	{
 		Meeting temp;
@@ -390,7 +473,13 @@ public class Diary {
 	        }
 	    }	
 	}
-	
+	/**
+	 * This prints out and individual meeting
+	 * @param date 		This gets the date of the meeting, LocalDate type
+	 * @param sTime 	This gets the start time of the meeting, LocalTime type
+	 * @param eTime		This gets the end time of the meeting, LocalTime type
+	 * @param desc		This gets the description of the meeting, String type
+	 */	
 	public void printMeeting(Meeting meeting)
 	{
 		LocalDate date = meeting.getDateOfMeeting();
@@ -401,7 +490,11 @@ public class Diary {
 		System.out.println(" ");
 		
 	}
-	
+	/**
+	 * This allows the system to decide what to undo, depending on the input
+	 * @param undoStack		This is used to determine what stack needs undoing
+	 * @param undoMeeting 	This is used to determine the meetings origin, and what happened to it
+	 */	
 	public void undo()
 	{
 		if(!undoStack.isEmpty())
@@ -429,17 +522,33 @@ public class Diary {
 		
 		
 	}
-
+	/**
+	 * This checks if it is possible for the meeting to be added, returns true or false
+	 * @param start 			This determines the nodes start time
+	 * @param end 				This determines the nodes end time
+	 * @param day				This determines the date of the meeting
+	 * @param meeting			This gets the meeting from the list of arrays, gets all the info for them
+	 * @param clash				This determines the amount of clashes in the data, if one is found it cannot add it
+	 * @param meetings			This is the LinkedList that holds all the meetings for the appropriate user 
+	 * @param x					This is the iterator for the for loop
+	 * @param x1				This is the iterator for the for loop
+	 * @param timeS				This is from the node in the meetings, compares start time
+	 * @param timeE				This is from the node in the meetings, compares end time
+	 * @param date 				This is from the node that holds meeting info. this is the date of it
+	 * @param hold				This acts as a means to save the meeting while its being checked
+	 * @param theMeetingList	This holds all the info on the possible meetings, and holds them in an ArrayList
+	 * @return ArrayList of all possible meetings
+	 */	
 	public ArrayList<Meeting> checkIfValidForMultiple(Employee held,ArrayList<Meeting> theMeetingsList)
 	{
 		ArrayList<Meeting> hold = new ArrayList<Meeting>();
 		for(int x = 0; x <theMeetingsList.size(); x++)
 		{
 			int clash = 0;
-			Meeting test =	theMeetingsList.get(x);
-			LocalTime start = test.getStartTime();
-			LocalTime end =test.getEndTime();
-			LocalDate day = test.getDateOfMeeting();
+			Meeting meeting =	theMeetingsList.get(x);
+			LocalTime start = meeting.getStartTime();
+			LocalTime end = meeting.getEndTime();
+			LocalDate day = meeting.getDateOfMeeting();
 			if(meetings.isEmpty())
 			{
 			

@@ -78,7 +78,12 @@ public class Meeting implements Comparable<Meeting>{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+	/**
+	 * This allows the system to compare meetings, without it, find, add or delete wouldn't be able to look at other nodes
+	 * @param compareMeeting	The meeting to compare to
+	 * @param dateOfMeeting 	The date to compare to
+	 * @param startTime			The start time to compare to
+	 */	
 	public int compareTo(Meeting compareMeeting)
 	{
 		

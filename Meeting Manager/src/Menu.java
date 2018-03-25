@@ -27,14 +27,24 @@ public class Menu {
 		loadEmployee.printDiary();
 		loadEmployee.getEmployeeDiary().saveDiary("./Files/Test2.txt");
 		*/
-		
 		mainMenu();
 		
 		
 		
 	}
 	
-	
+	/**
+	 * This is the menu choice the user makes based on the user ID selected
+	 * 
+	 * @param userChoice  	This is the value of the scanner, this is what it compares the options to
+	 * @param Case 1		This lets the user access a specific employee menu  
+	 * @param Case 2		This allows the user to search and mass add a meeting
+	 * @param Case 3		This exits the program
+	 * @param exitCondition	This runs the menu until the user selects exit
+	 * 
+	 * Each if statement checks for the value the user has entered, if it is not matching 
+	 * its records, it will tell the user to try again
+	 */
 	private static void mainMenu()
 	{
 		boolean exitCondition = false;
@@ -71,7 +81,21 @@ public class Menu {
 				
 		
 	}
-	
+	/**
+	 * This is the menu choice the user makes based on the user ID selected
+	 * @param userChoice  This is the value of the scanner, this is what it compares the options to
+	 * @param Case 1	This Adds a meeting   
+	 * @param Case 2	This removes a meeting
+	 * @param Case 3	This allows the user to edit the meeting
+	 * @param Case 4    This is the undo, it undoes the previous action
+	 * @param Case 5	This saves an employee diary
+	 * @param Case 6	This loads an employee diary
+	 * @param Case 7	This prints the diary to the employee
+	 * @param Case 8    This exit method, it take the user back to the top
+	 * 
+	 * Each if statement checks for the value the user has entered, if it is not matching 
+	 * its records, it will tell the user to try again
+	 */
 	private static void employeeMenu()
 	{
 		boolean exitCondition = false;
@@ -133,7 +157,11 @@ public class Menu {
 		}
 		
 	}
-	
+	/**
+	 * This method waits on user inputs and determines what the user will be inputing in the event they want to select and option
+	 * @param sc	This is the scanner, it senses the user input
+	 * @param userInput 	This detects the user input and provides feedback to the system
+	 */	
 	private static int getUserIntInput()
 	{
 		Scanner sc = new Scanner(System.in);
@@ -152,7 +180,11 @@ public class Menu {
 			}
 		}
 	}
-	
+	/**
+	 * This method waits on user inputs and determines what the user will be inputing in the event they want to select and option
+	 * @param sc	This is the scanner, it senses the user input
+	 * @param userInput 	This detects the user input and provides feedback to the system
+	 */	
 	private static String getUserStringInput()
 	{
 		Scanner sc = new Scanner(System.in);

@@ -20,7 +20,9 @@ public class Manager {
 		employeeTree = new TreeSet<Employee>();
 		addEmployeesOnStartup();
 	}
-	
+	/**
+	 * This is the method that adds employees to the tree, done on startup
+	 */
 	private void addEmployeesOnStartup()
 	{
 		employeeTree.add(new Employee(100));
@@ -30,13 +32,16 @@ public class Manager {
 		employeeTree.add(new Employee(500));
 	}
 	
-	
-	
+	/**
+	 * This checks if the tree is empty, called when it needs to confirm if it can do an action requested
+	 */	
 	Boolean isEmpty()
 	{
 		return employeeTree.isEmpty();
 	}
-	
+	/**
+	 * This searches for the employee the user has specified, this will return the result
+	 */
 	Employee findEmployee(int employeeID)
 	{
 		Employee findEmployee = new Employee(employeeID);
@@ -51,12 +56,40 @@ public class Manager {
 		}
 		return null;
 	}
-	
+	/**
+	 * This is the method that adds employees to the tree, done on startup
+	 */
 	void addEmployee(Employee addEmployee)
 	{
 		employeeTree.add(addEmployee);
 	}
-
+	/**
+	 * This is the method that searches the tree for employees, and adds meetings to multiple employees
+	 * @param closingTime 		This acts as an end time for the add meeting search
+	 * @param openingTime 		This acts as a beginning time for the user to add meetings to
+	 * @param s					This is the scanner that detects the user input
+	 * @param meeting			This detects the user input and parses it to other types of data
+	 * @param desc				This detects the user input for the description and puts it into the meeting
+	 * @param sDate				This is the start date, this accepts LocalDate type data, parsed by meeting
+	 * @param eDate				This is the end date, this accepts LocalDate type data, parsed by meeting
+	 * @param timeAddHrs		This is the unit of hours the system adds to each meeting
+	 * @param timeAddMins 		This is the unit of hours that the system adds to each meeting
+	 * @param startTime			This begins the time that the method runs the search
+	 * @param endTime			This ends the time the method was searched
+	 * @param reOccuringTimeS	This is the LocalTime variable that starts at the beginning of the day and adds the meeting time
+	 * @param reOccuringTimeE 	This local time acts the full meeting time ahead of reOccuringTimeS, checks against end values
+	 * @param theMeetingList	This is the arrayList that holds all the possible meetings before the check, this will remove meetings if clashes occur
+	 * @param possibleMeetings	This is the meetings that are added to the ArrayList, all possible times are added here
+	 * @param complete			This determines if the arrayList has been completed for all possible meetings
+	 * @param held				This holds the info for the user diary that it is appropriate to
+	 * @param diary				This calls on the diary, located within the held employee
+	 * @param inputs 			This detects the user input for the ID
+	 * @param x					This determines how long the for loop runs for 
+	 * @param employeeAdded		This is the list of employees that it has added it to, helps the print determine who to print for
+	 * @param print				This is the method that prints the given info to the user, all new meeting participants will be shown their diary
+	 * @param pass 				This acts as an in-between to pass on the information
+	 * @param employeeAdd		This adds the employees to the list
+	 */
 	public void hold()
 	{
 		
@@ -77,26 +110,26 @@ public class Manager {
 		System.out.println("Please enter how long the meeting will last (Min)");
 		timeAddMin = s.nextLong();
 		long startTime = System.currentTimeMillis();
-		LocalTime ReOccuringTimeS = openingTime.plusHours(timeAddHrs).plusMinutes(timeAddMin);
-		LocalTime ReOccuringTimeE = ReOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
+		LocalTime reOccuringTimeS = openingTime.plusHours(timeAddHrs).plusMinutes(timeAddMin);
+		LocalTime reOccuringTimeE = reOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
 		ArrayList<Meeting> theMeetingsList = new ArrayList<Meeting>();
 		Meeting possibleMeetings = new Meeting(sDate, openingTime, openingTime.plusHours(timeAddHrs).plusMinutes(timeAddMin), desc);
 		theMeetingsList.add(possibleMeetings);
 		boolean complete = false;
 		do
 		{
-			possibleMeetings = new Meeting(sDate, ReOccuringTimeS, ReOccuringTimeE, desc);
+			possibleMeetings = new Meeting(sDate, reOccuringTimeS, reOccuringTimeE, desc);
 			if(possibleMeetings.getEndTime().isAfter(closingTime) != true)
 			{
 				theMeetingsList.add(possibleMeetings);
-				ReOccuringTimeS = ReOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
-				ReOccuringTimeE = ReOccuringTimeE.plusHours(timeAddHrs).plusMinutes(timeAddMin);
+				reOccuringTimeS = reOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
+				reOccuringTimeE = reOccuringTimeE.plusHours(timeAddHrs).plusMinutes(timeAddMin);
 			}
 			else
 			{
 				sDate = sDate.plusDays(1);
-				ReOccuringTimeS = openingTime;
-				ReOccuringTimeE = ReOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
+				reOccuringTimeS = openingTime;
+				reOccuringTimeE = reOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
 				if(sDate.isAfter(eDate))
 				{
 					complete = true;
@@ -161,7 +194,5 @@ public class Manager {
 		
 
 		
-} 
-
-
+}
 }
