@@ -57,13 +57,7 @@ public class Manager {
 		}
 		return null;
 	}
-	/**
-	 * This is the method that adds employees to the tree, done on startup
-	 */
-	void addEmployee(Employee addEmployee)
-	{
-		employeeTree.add(addEmployee);
-	}
+
 	/**
 	 * This is the method that searches the tree for employees, and adds meetings to multiple employees
 	 * @param closingTime 		This acts as an end time for the add meeting search
@@ -93,7 +87,6 @@ public class Manager {
 	 */
 	public void hold()
 	{
-<<<<<<< HEAD
 		try
 		{
 			LocalTime closingTime = LocalTime.parse("20:00");
@@ -138,40 +131,7 @@ public class Manager {
 						complete = true;
 					}
 				}
-=======
 		
-		LocalTime closingTime = LocalTime.parse("20:00");
-		LocalTime openingTime = LocalTime.parse("10:00");
-		Scanner s = new Scanner(System.in);
-		String meeting;
-		System.out.println("Please input a description of the meeting");
-		String desc = s.nextLine();
-		System.out.println("Please input the begining Date of the potential meeting (YYYY-MM-DD)");
-		meeting = s.nextLine();
-		sDate = LocalDate.parse(meeting);
-		System.out.println("Please input the ending Date of the potential meeting (YYYY-MM-DD)");
-		meeting = s.nextLine();
-		eDate = LocalDate.parse(meeting);
-		System.out.println("Please enter how long the meeting will last (Hours)");
-		timeAddHrs = s.nextLong();
-		System.out.println("Please enter how long the meeting will last (Min)");
-		timeAddMin = s.nextLong();
-		long startTime = System.currentTimeMillis();
-		LocalTime reOccuringTimeS = openingTime.plusHours(timeAddHrs).plusMinutes(timeAddMin);
-		LocalTime reOccuringTimeE = reOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
-		ArrayList<Meeting> theMeetingsList = new ArrayList<Meeting>();
-		Meeting possibleMeetings = new Meeting(sDate, openingTime, openingTime.plusHours(timeAddHrs).plusMinutes(timeAddMin), desc);
-		theMeetingsList.add(possibleMeetings);
-		boolean complete = false;
-		do
-		{
-			possibleMeetings = new Meeting(sDate, reOccuringTimeS, reOccuringTimeE, desc);
-			if(possibleMeetings.getEndTime().isAfter(closingTime) != true)
-			{
-				theMeetingsList.add(possibleMeetings);
-				reOccuringTimeS = reOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
-				reOccuringTimeE = reOccuringTimeE.plusHours(timeAddHrs).plusMinutes(timeAddMin);
->>>>>>> 2e763b7e012c35d93398a5de2b83762c33e8c030
 			}
 			while(complete == false);
 			System.out.println("How many Employees do you intend to attend the meeting?");
@@ -179,17 +139,16 @@ public class Manager {
 			ArrayList<Integer> employeesAdded = new ArrayList<Integer>();
 			for(int x = 0; x<inputs; x++)
 			{
-<<<<<<< HEAD
+
 				System.out.println("Enter an employee ID:");
 				int ID = s.nextInt();
 				employeesAdded.add(ID);
 				if(findEmployee(ID) == null)
-=======
+
 				sDate = sDate.plusDays(1);
 				reOccuringTimeS = openingTime;
 				reOccuringTimeE = reOccuringTimeS.plusHours(timeAddHrs).plusMinutes(timeAddMin);
 				if(sDate.isAfter(eDate))
->>>>>>> 2e763b7e012c35d93398a5de2b83762c33e8c030
 				{
 					System.out.println("Could not find the employee: " + x);
 					continue;
@@ -244,13 +203,5 @@ public class Manager {
 		{
 			System.out.println("Invalid data entered - " + e);
 		}
-		
-		
-<<<<<<< HEAD
-		
-
-		
-=======
->>>>>>> 2e763b7e012c35d93398a5de2b83762c33e8c030
-}
+	}
 }
