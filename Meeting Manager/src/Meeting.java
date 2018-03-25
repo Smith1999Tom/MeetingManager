@@ -6,6 +6,26 @@ public class Meeting implements Comparable<Meeting>{
 	LocalTime startTime;
 	LocalTime endTime;
 	String description;
+	Meeting undoReference;
+	
+	
+	public Meeting getUndoReference() {
+		return undoReference;
+	}
+
+	public void setUndoReference(Meeting undoReference) {
+		this.undoReference = undoReference;
+	}
+
+	Meeting(Meeting copyMeeting)
+	{
+		dateOfMeeting = copyMeeting.getDateOfMeeting();
+		startTime = copyMeeting.getStartTime();
+		endTime = copyMeeting.getEndTime();
+		description = copyMeeting.getDescription();
+		undoReference = copyMeeting;
+	}
+	
 	
 	Meeting(LocalDate date, LocalTime start, LocalTime end, String desc)
 	{
@@ -13,6 +33,7 @@ public class Meeting implements Comparable<Meeting>{
 		startTime = start;
 		endTime = end;
 		description = desc;
+		undoReference = this;
 	}
 	
 	Meeting(String date, String start, String end, String desc)
@@ -23,6 +44,7 @@ public class Meeting implements Comparable<Meeting>{
 			startTime = LocalTime.parse(start);
 			endTime = LocalTime.parse(end);
 			description = desc;
+			undoReference = this;
 		}
 		catch(java.time.format.DateTimeParseException e)
 		{
@@ -59,6 +81,8 @@ public class Meeting implements Comparable<Meeting>{
 	
 	public int compareTo(Meeting compareMeeting)
 	{
+		
+		
 		if(this.dateOfMeeting.isBefore(compareMeeting.getDateOfMeeting()))
 			return -1;
 		else if(this.dateOfMeeting.isAfter(compareMeeting.getDateOfMeeting()))
@@ -72,7 +96,7 @@ public class Meeting implements Comparable<Meeting>{
 			{
 				return 1;
 			}
-			else throw new NullPointerException();
+			else return 0;
 	}
 	
 	

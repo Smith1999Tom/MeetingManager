@@ -12,7 +12,7 @@ import java.util.Iterator;
 public class Diary {
 
 	LinkedList<Meeting> meetings;
-	Stack<Meeting> undoStack;
+	Stack<Meeting> undoStack = new Stack<Meeting>();
 	Charset cs = StandardCharsets.UTF_8;
 	Iterator<Meeting> iterator;
 	private ArrayList<Meeting> clashes;
@@ -22,11 +22,26 @@ public class Diary {
 	Diary()
 	{
 		meetings = new LinkedList<Meeting>();
+		clashes = new ArrayList<Meeting>();
+		possibleMeetings = new ArrayList<Meeting>();
 	}
 	
 	boolean addEntry(Meeting addMeeting)
 	{
-		return meetings.add(addMeeting);
+		if(!checkIfValid(addMeeting))
+		{
+			Meeting undoMeeting = new Meeting(addMeeting);
+			undoStack.push(undoMeeting);
+			return meetings.add(addMeeting);
+		}
+		else
+		{
+			System.out.println("Meeting clashes with an existing meeting.");
+			return false;
+		}
+		
+		
+		
 	}
 	
 	Diary loadDiary(String pathString)
@@ -97,8 +112,14 @@ public class Diary {
 	}
 	
 	//At employee menu when the user selects add or delete, enter this method along with either "Edit" or "Delete" for this method to work
+	
+	/**
+	 * searches for a meeting the employee has on the date and time entered. Depending on if the employee wants to edit or delete the meeting the method will call an edit or delete method using the meeting that was found.
+	 * @param editOrDelete given from menu to check if the user wants to edit or delete the found meeting
+	 */
 		public void searchWithDateTime(String editOrDelete) 
 		{
+			//used to find the meeting
 			System.out.println("Enter date to search");
 			String dateString = sc.nextLine();
 			LocalDate date = LocalDate.parse(dateString);
@@ -106,140 +127,216 @@ public class Diary {
 			String timeString = sc.nextLine();
 			LocalTime time = LocalTime.parse(timeString);
 			
+			boolean meetingFound = false;
+			
+			//for length of for loop
 			int maxSize = meetings.size();
 			
 			for(int i = 0; i < maxSize; i++) 
 			{
+				//each for loop the search meeting is replaced with the next meeting in the list
 				Meeting search = meetings.get(i);
+				
+				//if date and time are the same as what the user inputs
 				if (search.getDateOfMeeting().equals(date) && search.getStartTime().equals(time)) 
 				{
 					if(editOrDelete.equals("Edit"))
+					{
+						//calls edit method with the meeting that was found
 						editMeeting(search);
+						meetingFound = true;
+						return;
+					}
 					else if(editOrDelete.equals("Delete"))
+					{
+						//calls delete method with the meeting that was found
 						deleteMeeting(search);
+						meetingFound = true;
+						return;
+					}
+					
+						
 				}
+			}
+			if (meetingFound == false) 
+			{
+				System.out.println("there is no meeting at that time on that day");
+				return;
 			}
 		}
 	
-		
+		/**
+		 * asks the user what wants to be edited, user responds through a switch case, the program then asks what the new version of the meeting will be, the user responds and checks if it is valid.
+		 * if the new version is valid the change will be made and the program will ask if the user wants to edit another part of the meeting, the user can continue editing or stop and exit the method
+		 * if the new version is not valid there will be no change to the meeting and the method will restart at the program asking what part will be edited
+		 * @param editMeeting The meeting that will be edited
+		 */
 		public void editMeeting(Meeting editMeeting) 
 		{
-		
+			//temporary fields of each part of the unedited meeting 
 			LocalDate tempDate = editMeeting.getDateOfMeeting();
 			LocalTime tempStart = editMeeting.getStartTime();
 			LocalTime tempEnd = editMeeting.getEndTime();
 			String tempDescription = editMeeting.getDescription();
 			
+			//removes the unedited meeting from the list 
 			meetings.remove(editMeeting);
 			
 			
 			boolean stop = false;
 			boolean editHappened;
+			// new meeting that will take the place of the removed meeting
+			Meeting newMeeting = null;
+			//while loop that will only stop when the user wants to stop editing the meeting
 			while (stop == false) 
 			{
 				editHappened = false;
 				printMeeting(editMeeting);
+				//options for the switch case
 				System.out.println("What would you like to edit?");
 				System.out.println("1 - Date of meeting");
 				System.out.println("2 - Start time");
 				System.out.println("3 - End time");
 				System.out.println("4 - Description");
+				//reads user input
 				String partEditedString = sc.nextLine();
 				int partEdited = Integer.parseInt(partEditedString);
 				LocalDate formattedDateEdit;
 				LocalTime formattedTimeEdit;
 				String edit;
 				boolean valid;
-				Meeting newMeeting;
+				
+				//switch case to process user choices
 				switch(partEdited) 
 				{
+						//changing the date
 				case 1:	System.out.println("Enter new meeting date:");			
 						edit = sc.nextLine();
 						formattedDateEdit = LocalDate.parse(edit);
+						//replacement meeting is given the new edited part along with the other temporary old parts
 						newMeeting = new Meeting(formattedDateEdit, tempStart, tempEnd, tempDescription);
+						//checks if this new meeting is valid
 						valid = checkIfValid(newMeeting);
 						if (valid == false) 
 						{
+							//adds the new meeting to the list
 							meetings.add(newMeeting);
+							//allows the user to exit
 							editHappened = true;
 							break;
 						}
 						else 
 						{
+							//adds the old meeting back to the list
 							newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
 							System.out.println("the new meeting clashes with another one");
 						}
 						
 						
-					
+						//changing the start time
 				case 2: System.out.println("Enter new start time:");			
 						edit = sc.nextLine();
 						
 						formattedTimeEdit = LocalTime.parse(edit);
+						//replacement meeting is given the new edited part along with the other temporary old parts
 						newMeeting = new Meeting(tempDate, formattedTimeEdit, tempEnd, tempDescription);
+						//checks if this new meeting is valid
 						valid = checkIfValid(editMeeting);
 						if (valid == false) 
 						{
+							//adds the new meeting to the list
 							meetings.add(newMeeting);
+							//allows the user to exit
 							editHappened = true;
 							break;
 						}
 						else 
 						{
+							//adds the old meeting back to the list
 							newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
 							System.out.println("the new meeting cashes with another one");
 						}
 					
+						//changing the end time
 				case 3: System.out.println("Enter new end time:");			
 						edit = sc.nextLine();
 						
 						formattedTimeEdit = LocalTime.parse(edit);					
 						editMeeting.setStartTime(formattedTimeEdit);
+						//replacement meeting is given the new edited part along with the other temporary old parts
 						newMeeting = new Meeting(tempDate, tempStart, formattedTimeEdit, tempDescription);
+						//checks if this new meeting is valid
 						valid = checkIfValid(editMeeting);
 						if (valid == false) 
 						{
+							//adds the new meeting to the list
 							meetings.add(newMeeting);
+							//allows the user to exit
 							editHappened = true;
 							break;
 						}
 						else 
 						{
+							//adds the old meeting back to the list
 							newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
 							System.out.println("the new meeting cashes with another one");
 						}
 					
+						//changing the description
 				case 4: System.out.println("Enter new description:");			
 						edit = sc.nextLine();
-						newMeeting = new Meeting(tempDate, tempStart, tempEnd, edit);			
+						//replacement meeting is given the new edited part along with the other temporary old parts
+						newMeeting = new Meeting(tempDate, tempStart, tempEnd, edit);	
+						//adds the new meeting to the list
+						meetings.add(newMeeting);
+						//allows the user to exit
 						editHappened = true;
 						break;
 					
+						//option if 1-4 is not selected
 				default:System.out.println("invalid selection:");
 						break;
 				}
 				
+				//if an edit is made
 				if (editHappened == true) 
 				{
 					
 					System.out.println("Would you like to edit another part of this meeting?");
 					System.out.println("Enter Y to edit another part");
 					String Y = sc.nextLine();
-					if (Y != "Y" || Y != "y") 
+					//if the user does not enter "Y" or "y"
+					if (Y.compareTo("Y") !=0 || Y.compareTo("y") != 0) 
 					{
+						//stops the while loop
 						stop = true;
 					}
 					
 				}
 			}
+			//adds this to the stack of things that happened to the diary
+			editMeeting.setUndoReference(newMeeting);
+			undoStack.push(editMeeting);
+			
+			
 		}
 		
+		/**
+		 * if there is a meeting to delete it will be removed from the diary
+		 * @param deletedMeeting the meeting that will be deleted
+		 */
 		public void deleteMeeting(Meeting deletedMeeting) 
 		{
 			
 			if(meetings != null) 
 			{
-				meetings.remove(deletedMeeting);
+				
+				if(meetings.remove(deletedMeeting))
+				{
+					deletedMeeting.setUndoReference(null);
+					undoStack.push(deletedMeeting);
+				}
+				
 			}
 			else 
 			{
@@ -328,6 +425,20 @@ public class Diary {
 		System.out.println();
 	}
 	
+	public void printDiary(Employee diary)
+	{
+		Diary diary2 = diary.getEmployeeDiary();
+		System.out.println("Diary of ID: " + diary.getEmployeeID());
+		System.out.println(" ");
+		meetings = diary2.getMeetings();
+		print();
+		
+}
+	
+	public LinkedList<Meeting> getMeetings() {
+		return meetings;
+	}
+
 	public void sort()
 	{
 		Meeting temp;
@@ -354,5 +465,101 @@ public class Diary {
 		
 	}
 	
-	
+	public void undo()
+	{
+		if(!undoStack.isEmpty())
+		{
+			Meeting undoMeeting = undoStack.pop();
+			if(undoMeeting.getUndoReference() == null)	//Meeting reference doesn't exist, so meeting was removed
+			{
+				meetings.add(undoMeeting);
+			}
+			else if(undoMeeting.compareTo(undoMeeting.getUndoReference()) == 0)	//Meetings are same, so meeting was added
+			{
+				meetings.remove(undoMeeting.getUndoReference());
+			}
+			else	//Meeting was edited
+			{
+				meetings.remove(undoMeeting.getUndoReference());
+				meetings.add(undoMeeting);
+			}
+			
+		}
+		else
+			System.out.println("Cannot undo any further.");
+		
+		
+		
+		
+	}
+
+	public ArrayList<Meeting> checkIfValidForMultiple(Employee held,ArrayList<Meeting> theMeetingsList)
+	{
+		ArrayList<Meeting> hold = new ArrayList<Meeting>();
+		for(int x = 0; x <theMeetingsList.size(); x++)
+		{
+			int clash = 0;
+			Meeting test =	theMeetingsList.get(x);
+			LocalTime start = test.getStartTime();
+			LocalTime end =test.getEndTime();
+			LocalDate day = test.getDateOfMeeting();
+			if(meetings.isEmpty())
+			{
+			
+			}
+			else
+			{
+				for(int x1 = 0; x1<meetings.size();x1++)
+				{
+					Meeting meeting2 = meetings.pop();
+					LocalTime timeS = meeting2.getStartTime();
+					LocalTime timeE = meeting2.getEndTime();
+				    LocalDate date = meeting2.getDateOfMeeting();
+					if(date.isEqual(day))
+					{
+						if(timeS.equals(start) || timeS.equals(end))
+						{
+							clash++;
+							hold.add(meeting2);
+						}
+						else if(timeE.equals(start) || timeE.equals(end))
+						{
+							clash++;
+							hold.add(meeting2);
+						}
+						else
+						{
+							if(timeS.isAfter(start)  && timeS.isBefore(end) || timeE.isAfter(start)  && timeE.isBefore(end))
+							{
+								clash++;
+								hold.add(meeting2);
+							}
+							
+							else
+							{
+								hold.add(meeting2);
+							}
+						}
+					}
+					else
+					{
+						hold.add(meeting2);
+					}
+				}
+				}
+		
+				meetings.addAll(hold);
+				hold.removeAll(hold);
+				if(clash != 0)
+				{
+					theMeetingsList.remove(x);
+				}
+				else
+				{
+					
+				}
+			}
+			return theMeetingsList;
+}
+
 }
