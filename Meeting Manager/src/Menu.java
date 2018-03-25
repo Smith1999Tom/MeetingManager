@@ -124,7 +124,9 @@ public class Menu {
 				String endTime = getUserStringInput();
 				System.out.println("Enter a description");
 				String description = getUserStringInput();
-				currentEmployee.getEmployeeDiary().addEntry(new Meeting(date, startTime, endTime, description));
+				Meeting addMeeting = new Meeting(date, startTime, endTime, description);
+				if(addMeeting.getStartTime() != null)
+					currentEmployee.getEmployeeDiary().addEntry(addMeeting);
 				break;
 				
 			case 2: //Delete

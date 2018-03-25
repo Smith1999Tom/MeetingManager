@@ -33,8 +33,11 @@ public class Diary {
 		if(!checkIfValid(addMeeting))
 		{
 			Meeting undoMeeting = new Meeting(addMeeting);
-			undoStack.push(undoMeeting);
-			return meetings.add(addMeeting);
+			boolean validDetails = false;
+			validDetails = meetings.add(addMeeting);
+			if(validDetails)
+				undoStack.push(undoMeeting);
+			return validDetails;
 		}
 		else
 		{
@@ -149,33 +152,43 @@ public class Diary {
 	//At employee menu when the user selects add or delete, enter this method along with either "Edit" or "Delete" for this method to work
 		public void searchWithDateTime(String editOrDelete) 
 		{
-			System.out.println("Enter date to search");
-			String dateString = sc.nextLine();
-			LocalDate date = LocalDate.parse(dateString);
-			System.out.println("Enter start time to search");
-			String timeString = sc.nextLine();
-			LocalTime time = LocalTime.parse(timeString);
 			
-			int maxSize = meetings.size();
-			
-			for(int i = 0; i < maxSize; i++) 
+			try
 			{
-				Meeting search = meetings.get(i);
-				if (search.getDateOfMeeting().equals(date) && search.getStartTime().equals(time)) 
+				System.out.println("Enter date to search");
+				String dateString = sc.nextLine();
+				LocalDate date = LocalDate.parse(dateString);
+				System.out.println("Enter start time to search");
+				String timeString = sc.nextLine();
+				LocalTime time = LocalTime.parse(timeString);
+				
+				int maxSize = meetings.size();
+				
+				for(int i = 0; i < maxSize; i++) 
 				{
-					if(editOrDelete.equals("Edit"))
+					Meeting search = meetings.get(i);
+					if (search.getDateOfMeeting().equals(date) && search.getStartTime().equals(time)) 
 					{
-						editMeeting(search);
-						return;
+						if(editOrDelete.equals("Edit"))
+						{
+							editMeeting(search);
+							return;
+						}
+						else if(editOrDelete.equals("Delete"))
+						{
+							deleteMeeting(search);
+							return;
+						}
+							
 					}
-					else if(editOrDelete.equals("Delete"))
-					{
-						deleteMeeting(search);
-						return;
-					}
-						
 				}
 			}
+			catch(java.time.format.DateTimeParseException e)
+			{
+				System.out.println("Invalid data entered - " + e);
+			}
+			
+			
 		}
 	
 		/**
@@ -198,118 +211,128 @@ public class Diary {
 		 */
 		public void editMeeting(Meeting editMeeting) 
 		{
-		
-			LocalDate tempDate = editMeeting.getDateOfMeeting();
-			LocalTime tempStart = editMeeting.getStartTime();
-			LocalTime tempEnd = editMeeting.getEndTime();
-			String tempDescription = editMeeting.getDescription();
 			
-			meetings.remove(editMeeting);
-			
-			
-			boolean stop = false;
-			boolean editHappened;
-			Meeting newMeeting = null;
-			while (stop == false) 
+			try
 			{
-				editHappened = false;
-				printMeeting(editMeeting);
-				System.out.println("What would you like to edit?");
-				System.out.println("1 - Date of meeting");
-				System.out.println("2 - Start time");
-				System.out.println("3 - End time");
-				System.out.println("4 - Description");
-				String partEditedString = sc.nextLine();
-				int partEdited = Integer.parseInt(partEditedString);
-				LocalDate formattedDateEdit;
-				LocalTime formattedTimeEdit;
-				String edit;
-				boolean valid;
+				LocalDate tempDate = editMeeting.getDateOfMeeting();
+				LocalTime tempStart = editMeeting.getStartTime();
+				LocalTime tempEnd = editMeeting.getEndTime();
+				String tempDescription = editMeeting.getDescription();
 				
-				switch(partEdited) 
-				{
-				case 1:	System.out.println("Enter new meeting date:");			
-						edit = sc.nextLine();
-						formattedDateEdit = LocalDate.parse(edit);
-						newMeeting = new Meeting(formattedDateEdit, tempStart, tempEnd, tempDescription);
-						valid = checkIfValid(newMeeting);
-						if (valid == false) 
-						{
-							meetings.add(newMeeting);
-							editHappened = true;
-							break;
-						}
-						else 
-						{
-							newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
-							System.out.println("the new meeting clashes with another one");
-						}
-						
-						
-					
-				case 2: System.out.println("Enter new start time:");			
-						edit = sc.nextLine();
-						
-						formattedTimeEdit = LocalTime.parse(edit);
-						newMeeting = new Meeting(tempDate, formattedTimeEdit, tempEnd, tempDescription);
-						valid = checkIfValid(editMeeting);
-						if (valid == false) 
-						{
-							meetings.add(newMeeting);
-							editHappened = true;
-							break;
-						}
-						else 
-						{
-							newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
-							System.out.println("the new meeting cashes with another one");
-						}
-					
-				case 3: System.out.println("Enter new end time:");			
-						edit = sc.nextLine();
-						
-						formattedTimeEdit = LocalTime.parse(edit);					
-						editMeeting.setStartTime(formattedTimeEdit);
-						newMeeting = new Meeting(tempDate, tempStart, formattedTimeEdit, tempDescription);
-						valid = checkIfValid(editMeeting);
-						if (valid == false) 
-						{
-							meetings.add(newMeeting);
-							editHappened = true;
-							break;
-						}
-						else 
-						{
-							newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
-							System.out.println("the new meeting cashes with another one");
-						}
-					
-				case 4: System.out.println("Enter new description:");			
-						edit = sc.nextLine();
-						newMeeting = new Meeting(tempDate, tempStart, tempEnd, edit);		
-						meetings.add(newMeeting);
-						editHappened = true;
-						break;
-					
-				default:System.out.println("invalid selection:");
-						break;
-				}
+				meetings.remove(editMeeting);
 				
-				if (editHappened == true) 
+				
+				boolean stop = false;
+				boolean editHappened;
+				Meeting newMeeting = null;
+				while (stop == false) 
 				{
+					editHappened = false;
+					printMeeting(editMeeting);
+					System.out.println("What would you like to edit?");
+					System.out.println("1 - Date of meeting");
+					System.out.println("2 - Start time");
+					System.out.println("3 - End time");
+					System.out.println("4 - Description");
+					String partEditedString = sc.nextLine();
+					int partEdited = Integer.parseInt(partEditedString);
+					LocalDate formattedDateEdit;
+					LocalTime formattedTimeEdit;
+					String edit;
+					boolean valid;
 					
-					System.out.println("Would you like to edit another part of this meeting?");
-					System.out.println("Enter Y to edit another part");
-					String Y = sc.nextLine();
-					if (Y != "Y" && Y != "y") 
+					switch(partEdited) 
 					{
-						stop = true;
+					case 1:	System.out.println("Enter new meeting date:");			
+							edit = sc.nextLine();
+							formattedDateEdit = LocalDate.parse(edit);
+							newMeeting = new Meeting(formattedDateEdit, tempStart, tempEnd, tempDescription);
+							valid = checkIfValid(newMeeting);
+							if (valid == false) 
+							{
+								meetings.add(newMeeting);
+								editHappened = true;
+								break;
+							}
+							else 
+							{
+								newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
+								System.out.println("the new meeting clashes with another one");
+							}
+							
+							
+						
+					case 2: System.out.println("Enter new start time:");			
+							edit = sc.nextLine();
+							
+							formattedTimeEdit = LocalTime.parse(edit);
+							newMeeting = new Meeting(tempDate, formattedTimeEdit, tempEnd, tempDescription);
+							valid = checkIfValid(editMeeting);
+							if (valid == false) 
+							{
+								meetings.add(newMeeting);
+								editHappened = true;
+								break;
+							}
+							else 
+							{
+								newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
+								System.out.println("the new meeting cashes with another one");
+							}
+						
+					case 3: System.out.println("Enter new end time:");			
+							edit = sc.nextLine();
+							
+							formattedTimeEdit = LocalTime.parse(edit);					
+							editMeeting.setStartTime(formattedTimeEdit);
+							newMeeting = new Meeting(tempDate, tempStart, formattedTimeEdit, tempDescription);
+							valid = checkIfValid(editMeeting);
+							if (valid == false) 
+							{
+								meetings.add(newMeeting);
+								editHappened = true;
+								break;
+							}
+							else 
+							{
+								newMeeting = new Meeting(tempDate, tempStart, tempEnd, tempDescription);
+								System.out.println("the new meeting cashes with another one");
+							}
+						
+					case 4: System.out.println("Enter new description:");			
+							edit = sc.nextLine();
+							newMeeting = new Meeting(tempDate, tempStart, tempEnd, edit);		
+							meetings.add(newMeeting);
+							editHappened = true;
+							break;
+						
+					default:System.out.println("invalid selection:");
+							break;
 					}
 					
+					if (editHappened == true) 
+					{
+						
+						System.out.println("Would you like to edit another part of this meeting?");
+						System.out.println("Enter Y to edit another part");
+						String Y = sc.nextLine();
+						if (Y != "Y" && Y != "y") 
+						{
+							stop = true;
+						}
+						
+					}
 				}
+				editMeeting.setUndoReference(newMeeting);
+				undoStack.push(editMeeting);
 			}
-			editMeeting.setUndoReference(newMeeting);
-			undoStack.push(editMeeting);
+			catch(java.time.format.DateTimeParseException e)
+			{
+				System.out.println("Invalid data entered - " + e);
+			}
+			
+		
+			
 			
 			
 		}
@@ -355,68 +378,78 @@ public class Diary {
 		 */	
 		public boolean checkIfValid(Meeting meeting)
 		{
-			LocalTime start = meeting.getStartTime();
-			LocalTime end = meeting.getEndTime();
-			LocalDate day = meeting.getDateOfMeeting();
-			ArrayList<Meeting> hold = new ArrayList<Meeting>();
-			int clash = 0;
-			if(meetings.isEmpty())
+			
+			try
 			{
-				return false;
-			}
-			else
-			{
-				for(int x = 0; x<meetings.size();x++)
+				LocalTime start = meeting.getStartTime();
+				LocalTime end = meeting.getEndTime();
+				LocalDate day = meeting.getDateOfMeeting();
+				ArrayList<Meeting> hold = new ArrayList<Meeting>();
+				int clash = 0;
+				if(meetings.isEmpty())
 				{
-					meeting = meetings.pop();
-					LocalTime timeS = meeting.getStartTime();
-					LocalTime timeE = meeting.getEndTime();
-					LocalDate date = meeting.getDateOfMeeting();
-					if(date.isEqual(day))
+					return false;
+				}
+				else
+				{
+					for(int x = 0; x<meetings.size();x++)
 					{
-						if(timeS.equals(start) || timeS.equals(end))
+						meeting = meetings.pop();
+						LocalTime timeS = meeting.getStartTime();
+						LocalTime timeE = meeting.getEndTime();
+						LocalDate date = meeting.getDateOfMeeting();
+						if(date.isEqual(day))
 						{
-							hold.add(meeting);
-							clashes.add(meeting);
-							clash++;
-						}
-						else if(timeE.equals(start) || timeE.equals(end))
-						{
-							hold.add(meeting);
-							clashes.add(meeting);
-							clash++;
-						}
-						else
-						{
-							if(timeS.isAfter(start)  && timeS.isBefore(end) || timeE.isAfter(start)  && timeE.isBefore(end))
+							if(timeS.equals(start) || timeS.equals(end))
 							{
 								hold.add(meeting);
 								clashes.add(meeting);
 								clash++;
 							}
-							
-							else
+							else if(timeE.equals(start) || timeE.equals(end))
 							{
 								hold.add(meeting);
+								clashes.add(meeting);
+								clash++;
+							}
+							else
+							{
+								if(timeS.isAfter(start)  && timeS.isBefore(end) || timeE.isAfter(start)  && timeE.isBefore(end))
+								{
+									hold.add(meeting);
+									clashes.add(meeting);
+									clash++;
+								}
+								
+								else
+								{
+									hold.add(meeting);
+								}
 							}
 						}
+						else
+						{
+							hold.add(meeting);
+						}
+						}
+					}
+					meetings.addAll(hold);
+					hold.removeAll(hold);
+					if(clash != 0)
+					{
+						return true;
 					}
 					else
 					{
-						hold.add(meeting);
+						return false;
 					}
-					}
-				}
-				meetings.addAll(hold);
-				hold.removeAll(hold);
-				if(clash != 0)
-				{
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+			}
+			catch(NullPointerException e)
+			{
+				return true;
+			}
+			
+			
 			}
 				
 	/**

@@ -86,22 +86,29 @@ public class Meeting implements Comparable<Meeting>{
 	 */	
 	public int compareTo(Meeting compareMeeting)
 	{
-		
-		
-		if(this.dateOfMeeting.isBefore(compareMeeting.getDateOfMeeting()))
-			return -1;
-		else if(this.dateOfMeeting.isAfter(compareMeeting.getDateOfMeeting()))
-			return 1;
-		else
-			if(this.startTime.isBefore(compareMeeting.getStartTime()))
-			{
+		try
+		{
+			if(this.dateOfMeeting.isBefore(compareMeeting.getDateOfMeeting()))
 				return -1;
-			}
-			else if(this.startTime.isAfter(compareMeeting.getStartTime()))
-			{
+			else if(this.dateOfMeeting.isAfter(compareMeeting.getDateOfMeeting()))
 				return 1;
-			}
-			else return 0;
+			else
+				if(this.startTime.isBefore(compareMeeting.getStartTime()))
+				{
+					return -1;
+				}
+				else if(this.startTime.isAfter(compareMeeting.getStartTime()))
+				{
+					return 1;
+				}
+				else return 0;
+		}
+		catch(NullPointerException e)
+		{
+			return 0;
+		}
+		
+		
 	}
 	
 	
